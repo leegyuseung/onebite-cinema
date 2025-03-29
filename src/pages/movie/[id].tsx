@@ -1,13 +1,21 @@
+import fetchDetailMovie from "@/lib/fetch-detail-movie";
 import style from "./[id].module.css";
-import movies from "@/mock/dummy.json";
-import { useRouter } from "next/router";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 
-export default function Page() {
-  const router = useRouter();
-  const { id } = router.query;
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const id = context.params!.id;
+  const movie = await fetchDetailMovie(Number(id));
 
-  const movie = movies.find((movie) => movie.id === Number(id));
+  return {
+    props: { movie },
+  };
+};
 
+export default function Page({
+  movie,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (!movie) return <div>영화를 찾을 수 없습니다.</div>;
 
   const {

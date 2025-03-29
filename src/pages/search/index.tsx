@@ -1,21 +1,27 @@
-import movies from "@/mock/dummy.json";
 import SearchableLayout from "@/components/searchable-layout";
 import RecommandMovieItem from "@/components/recommand-movie-item";
-import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
-export default function Page() {
-  const router = useRouter();
-  const [filterMovies, setFilterMovies] = useState(movies);
-  const q = (router.query.q as string) || "";
+import fetchMovies from "@/lib/fetch-movies";
+import { ReactNode } from "react";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 
-  useEffect(() => {
-    const filtered = movies.filter((movie) => movie.title.includes(q));
-    setFilterMovies(filtered);
-  }, [q]);
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const q = context.query.q;
 
+  const movies = await fetchMovies(q as string);
+
+  return {
+    props: { movies },
+  };
+};
+
+export default function Page({
+  movies,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div>
-      {filterMovies.map((movie) => (
+      {movies.map((movie) => (
         <RecommandMovieItem key={movie.id} {...movie} />
       ))}
     </div>

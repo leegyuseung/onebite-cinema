@@ -4,29 +4,7 @@ import fetchMovies from "@/lib/fetch-movies";
 import { ReactNode, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MovieData } from "@/types/types";
-
-// query가 없어서 실행은 못한다.
-// export const getStaticProps = async (context: GetStaticPropsContext) => {
-//   const q = context.query.q;
-
-//   const movies = await fetchMovies(q as string);
-
-//   return {
-//     props: { movies },
-//   };
-// };
-
-// export const getServerSideProps = async (
-//   context: GetServerSidePropsContext
-// ) => {
-//   const q = context.query.q;
-
-//   const movies = await fetchMovies(q as string);
-
-//   return {
-//     props: { movies },
-//   };
-// };
+import Head from "next/head";
 
 export default function Page() {
   const [movies, setMovies] = useState<MovieData[]>([]);
@@ -46,6 +24,15 @@ export default function Page() {
 
   return (
     <div>
+      <Head>
+        <title>한입 씨네마 - 검색결과</title>
+        <meta property="og:image" content="/thumbnail.png" />
+        <meta property="og:title" content="한입 씨네마 - 검색결과" />
+        <meta
+          property="og:description"
+          content="한입 씨네마에 등록된 영화들을 만나보세요 🎥"
+        />
+      </Head>
       {movies.map((movie) => (
         <RecommandMovieItem key={movie.id} {...movie} />
       ))}

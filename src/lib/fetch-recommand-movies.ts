@@ -1,7 +1,7 @@
 import { MovieData } from "@/types/types";
 
 export default async function fetchRecommandMovies(): Promise<MovieData[]> {
-  const url = `http://localhost:12345/movie/random`;
+  const url = `https://onebite-cinema-api-main-ebon.vercel.app/movie/random`;
 
   try {
     const response = await fetch(url);
